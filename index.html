@@ -18,7 +18,7 @@ body{
   font-family:system-ui,"Noto Sans JP",sans-serif;-webkit-overflow-scrolling:touch;
 }
 
-/* Header */
+/* Header (match your D&D look) */
 header{text-align:center;padding:26px 12px 12px}
 .h1{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(34px,6.2vw,56px);letter-spacing:.5px;text-transform:uppercase;}
 .h2{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(22px,4.5vw,36px);margin-top:6px;}
@@ -72,7 +72,7 @@ header{text-align:center;padding:26px 12px 12px}
 
 /* buttons */
 .btn{
-  display:block;margin:20px auto;border:none;border-radius:999px;
+  display:block;margin:16px auto 8px;border:none;border-radius:999px;
   padding:16px 36px;font-weight:900;font-size:clamp(18px,4vw,22px);
   background:radial-gradient(circle at 30% 30%,#1ee99a,#15c473,#0ea85d);
   color:#00230f;text-shadow:0 1px 0 rgba(255,255,255,.5);
@@ -81,9 +81,23 @@ header{text-align:center;padding:26px 12px 12px}
 }
 .btn:disabled{opacity:.4;cursor:not-allowed}
 
-.correctLine{text-align:left;color:#cfe1ff;font-weight:700;margin-top:10px;opacity:0;transition:.3s}
+/* blue OK button (for wrong answers) */
+.btn.blue{
+  background:radial-gradient(circle at 30% 30%, #66b3ff, #3e90ff, #1e6eff);
+  color:#00163a;
+  box-shadow:0 0 0 5px rgba(62,144,255,.25), 0 0 18px rgba(62,144,255,.85);
+}
+
+/* progress under the button */
+#progress{ text-align:center; color:#cfe1ff; opacity:.9; font-weight:700; margin-top:2px }
+
+/* correct line (bigger, centered) */
+.correctLine{
+  text-align:center; color:#ffffff; font-weight:900;
+  font-size:clamp(18px,4.8vw,28px);
+  margin-top:12px; opacity:0; transition:.3s
+}
 .correctLine.show{opacity:1}
-#okBtn{display:none}
 
 /* FX */
 .fx{position:fixed;inset:0;pointer-events:none;overflow:hidden}
@@ -92,9 +106,21 @@ header{text-align:center;padding:26px 12px 12px}
 .smoke{position:absolute;width:clamp(60px,15vw,160px);height:clamp(60px,15vw,160px);border-radius:50%;background:radial-gradient(circle at 40% 40%,#fff,rgba(255,255,255,.7) 60%,rgba(255,255,255,0) 72%);animation:smokeRise 1600ms ease-out forwards;filter:blur(1px);}
 @keyframes smokeRise{0%{opacity:0;transform:translate(-50%,0) scale(.6)}20%{opacity:.9}100%{opacity:0;transform:translate(-50%,-260px) scale(1.4)}}
 
-.end{text-align:center;padding:40px 10px 80px}
-.end h2{font-family:'Cinzel',serif;font-size:clamp(26px,6vw,40px)}
-.end .score{font-weight:900;font-size:clamp(20px,5vw,28px)}
+.end{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px 10px}
+.end h2{font-family:'Cinzel',serif;font-size:clamp(26px,6vw,40px);margin:0 0 8px}
+.end .score{font-weight:900;font-size:clamp(20px,5vw,28px);margin-top:6px}
+.end .msg{font-weight:900;font-size:clamp(24px,5.6vw,40px);margin-bottom:10px}
+
+/* continuous glow backgrounds for result */
+.end.red   {background:#a30606; animation:endGlowRed 3s ease-in-out infinite}
+.end.orange{background:#b85c00; animation:endGlowOrange 3s ease-in-out infinite}
+.end.blue  {background:#063a8f; animation:endGlowBlue 3s ease-in-out infinite}
+.end.gold  {background:#b58900; animation:endGlowGold 3s ease-in-out infinite}
+@keyframes endGlowRed   {0%{box-shadow:inset 0 0 0 0 rgba(255,80,80,.4)}50%{box-shadow:inset 0 0 180px 40px rgba(255,80,80,.65)}100%{box-shadow:inset 0 0 0 0 rgba(255,80,80,.4)}}
+@keyframes endGlowOrange{0%{box-shadow:inset 0 0 0 0 rgba(255,166,58,.4)}50%{box-shadow:inset 0 0 180px 40px rgba(255,166,58,.65)}100%{box-shadow:inset 0 0 0 0 rgba(255,166,58,.4)}}
+@keyframes endGlowBlue  {0%{box-shadow:inset 0 0 0 0 rgba(88,160,255,.4)}50%{box-shadow:inset 0 0 180px 40px rgba(88,160,255,.65)}100%{box-shadow:inset 0 0 0 0 rgba(88,160,255,.4)}}
+@keyframes endGlowGold  {0%{box-shadow:inset 0 0 0 0 rgba(255,215,96,.4)}50%{box-shadow:inset 0 0 180px 40px rgba(255,215,96,.7)}100%{box-shadow:inset 0 0 0 0 rgba(255,215,96,.4)}}
+
 footer{text-align:center;color:#c9d4ec;font-family:'Cinzel',serif;font-weight:700;padding:40px 10px}
 </style>
 </head>
@@ -113,19 +139,22 @@ footer{text-align:center;color:#c9d4ec;font-family:'Cinzel',serif;font-weight:70
 
     <div id="bank" class="wordbank"></div>
     <div id="sentence" class="sentence"></div>
+
     <div id="correctLine" class="correctLine"></div>
     <div id="okWrap" style="text-align:center;display:none">
       <div style="margin-top:8px">正しい文を読んで OK をクリック</div>
-      <button id="okBtn" class="btn" style="margin-top:10px;padding:10px 28px;font-size:clamp(16px,3.8vw,20px)">OK</button>
+      <button id="okBtn" class="btn blue" style="margin-top:10px;padding:10px 28px;font-size:clamp(16px,3.8vw,20px)">OK</button>
     </div>
-    <button id="checkBtn" class="btn" disabled>Check</button>
-  </div>
 
-  <div id="end" class="end" style="display:none">
-    <h2>結果</h2>
-    <div id="scoreText" class="score"></div>
-    <div id="msg"></div>
+    <button id="checkBtn" class="btn" disabled>Check</button>
+    <div id="progress">1 / 15（0%）</div>
   </div>
+</div>
+
+<div id="end" class="end">
+  <div class="msg" id="endMsg"></div>
+  <div class="score" id="scoreText"></div>
+  <footer style="opacity:.85">Bryan’s English School</footer>
 </div>
 
 <div id="fx" class="fx"></div>
@@ -168,20 +197,24 @@ const hira=document.getElementById('hira');
 const bank=document.getElementById('bank');
 const sent=document.getElementById('sentence');
 const check=document.getElementById('checkBtn');
+const progress=document.getElementById('progress');
 const correctLine=document.getElementById('correctLine');
 const okWrap=document.getElementById('okWrap');
 const okBtn=document.getElementById('okBtn');
 const fx=document.getElementById('fx');
 const panel=document.getElementById('panel');
+
 const end=document.getElementById('end');
 const scoreText=document.getElementById('scoreText');
-const msg=document.getElementById('msg');
+const endMsg=document.getElementById('endMsg');
 
 /* ===== Mount ===== */
 function mount(){
   bank.innerHTML=''; sent.innerHTML='';
   correctLine.textContent=''; correctLine.classList.remove('show');
-  okWrap.style.display='none'; check.disabled=true;
+  okWrap.style.display='none';
+  check.disabled=true; check.style.display='block';
+  updateProgress();
 
   const item=DATA[order[i]];
   jp.textContent=item.jp;
@@ -201,9 +234,7 @@ function mount(){
 }
 
 /* enable/disable Check based on whether bank is empty */
-function checkWords(){
-  check.disabled = bank.children.length !== 0;
-}
+function checkWords(){ check.disabled = bank.children.length !== 0; }
 
 /* Drag n’ drop: disappear from bank, allow drag-back */
 ['bank','sentence'].forEach(id=>{
@@ -225,13 +256,17 @@ check.onclick = async ()=>{
 
   if(built===correct){
     score++; bigHearts(sent); playSafe(SOK);
-    await wait(2000);          // 2s beat so audio/FX feel complete
+    await wait(2000);  // hearts+audio finish
     next();
   }else{
     correctLine.textContent = "正解：" + correct;
     correctLine.classList.add('show');
+
     hugeSmoke(sent); playSafe(SBAD);
-    okWrap.style.display='block'; // student reads then advances
+
+    // swap to blue OK flow
+    check.style.display='none';
+    okWrap.style.display='block';
   }
 };
 
@@ -244,21 +279,30 @@ function next(){
   mount();
 }
 
-/* ===== Finish screen ===== */
+function updateProgress(){
+  const n=i+1, total=DATA.length;
+  const pct=Math.round(((n-1)/total)*100); // progress *before* answering
+  progress.textContent = `${n} / ${total}（${pct}%）`;
+}
+
+/* ===== Finish screen with continuous glow backgrounds ===== */
 function finish(){
   panel.style.display='none';
-  end.style.display='block';
-  const pct = Math.round(score/DATA.length*100);
+  end.style.display='flex';
+
+  const pct = Math.round((score/DATA.length)*100);
   scoreText.textContent = `スコア：${score}/${DATA.length}（${pct}%）`;
 
-  let line="", snd=null;
-  if(score<=5){ line="だめだ〜！アニメをやめて、ブーリキュラムを見よう！"; snd=SR0_5; }
-  else if(score<=10){ line="えっ？YouTubeばかり。Boo-tube を見よう！"; snd=SR6_10; }
-  else if(score<=14){ line="いいね！でも満点を目指そう。"; snd=SR15; }
-  else { line="あなたは超天才！"; snd=SR15; }
+  let theme = "blue", msgText = "";
+  if(score <= 5){ theme="red";    msgText="ブーリキュラム見てないでしょ！"; }
+  else if(score <= 10){ theme="orange"; msgText="YouTubeばかりじゃなくて、Boo-tube 見よう！"; }
+  else if(score <= 14){ theme="blue";   msgText="いいね！でも満点を目指そう。"; }
+  else { theme="gold";  msgText="あなたは超天才！"; }
 
-  msg.textContent = line;
-  playSafe(snd);
+  end.className = `end ${theme}`;
+  endMsg.textContent = msgText;
+
+  playSafe(theme==="red" ? SR0_5 : theme==="orange" ? SR6_10 : SR15);
   bigHearts(document.body, 100);
 }
 
