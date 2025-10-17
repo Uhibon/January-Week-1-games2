@@ -18,105 +18,78 @@ body{
   font-family:system-ui,"Noto Sans JP",sans-serif;-webkit-overflow-scrolling:touch;
 }
 
-/* ===== Header scaled to match your D&D screenshot ===== */
+/* Header */
 header{text-align:center;padding:26px 12px 12px}
-.h1{
-  font-family:'Cinzel',serif;font-weight:900;
-  font-size:clamp(34px,6.2vw,56px); /* BIG like the pic */
-  letter-spacing:.5px;text-transform:uppercase;line-height:1.05;
-}
-.h2{
-  font-family:'Cinzel',serif;font-weight:900;
-  font-size:clamp(22px,4.5vw,36px); line-height:1.05; margin-top:6px;
-}
-.h3{
-  font-family:'Cinzel',serif;font-weight:900;
-  font-size:clamp(16px,3.6vw,22px); margin-top:10px; opacity:.9;
-}
-.h4{
-  font-weight:800;font-size:clamp(14px,3.4vw,20px);
-  color:#cfe1ff; margin-top:2px;
-}
+.h1{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(34px,6.2vw,56px);letter-spacing:.5px;text-transform:uppercase;}
+.h2{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(22px,4.5vw,36px);margin-top:6px;}
+.h3{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(16px,3.6vw,22px);margin-top:10px;opacity:.9;}
+.h4{font-weight:800;font-size:clamp(14px,3.4vw,20px);color:#cfe1ff;margin-top:2px;}
 
 .wrap{max-width:1100px;margin:0 auto;padding:8px 16px 80px}
 .panel{padding:20px;border:1px solid var(--outline);border-radius:var(--radius);
   background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
   box-shadow:0 6px 24px rgba(0,0,0,.4);}
 
-/* ===== JP Card: horizontal animated candy stripes + soft pulse ===== */
+/* JP Card (horizontal candy stripes + pulse) */
 .jpCard{
   position:relative;border-radius:var(--radius);overflow:hidden;
   border:1px solid var(--outline);height:160px;margin-bottom:10px;
   display:flex;align-items:center;justify-content:center;
-  /* horizontal bands: use 'to bottom' and animate Y */
   background:repeating-linear-gradient(to bottom,
-      #ff6ec7 0 28px, #5ee6ff 28px 56px, #ffd166 56px 84px,
-      #8aff80 84px 112px, #c77dff 112px 140px, #fff680 140px 168px);
-  background-size:100% 600px; animation:stripeSlide 18s linear infinite;
-  isolation:isolate; /* for overlay pulse */
+    #ff6ec7 0 28px,#5ee6ff 28px 56px,#ffd166 56px 84px,
+    #8aff80 84px 112px,#c77dff 112px 140px,#fff680 140px 168px);
+  background-size:100% 600px;animation:stripeSlide 18s linear infinite;
+  isolation:isolate;
 }
 @keyframes stripeSlide{from{background-position-y:0}to{background-position-y:-600px}}
-/* pulse glow */
 .jpCard::after{
-  content:""; position:absolute; inset:0; border-radius:inherit; z-index:0;
-  box-shadow:0 0 0 0 rgba(255,255,255,.18), inset 0 0 0 0 rgba(255,255,255,.1);
+  content:"";position:absolute;inset:0;border-radius:inherit;z-index:0;
   animation:pulse 3s ease-in-out infinite;
+  box-shadow:0 0 0 0 rgba(255,255,255,.2),inset 0 0 0 0 rgba(255,255,255,.1);
 }
 @keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(255,255,255,.18), inset 0 0 0 0 rgba(255,255,255,.10)}
-  50%{box-shadow:0 0 32px 6px rgba(255,255,255,.20), inset 0 0 22px 6px rgba(255,255,255,.12)}
-  100%{box-shadow:0 0 0 0 rgba(255,255,255,.18), inset 0 0 0 0 rgba(255,255,255,.10)}
+  0%{box-shadow:0 0 0 0 rgba(255,255,255,.2),inset 0 0 0 0 rgba(255,255,255,.1)}
+  50%{box-shadow:0 0 40px 6px rgba(255,255,255,.25),inset 0 0 20px 4px rgba(255,255,255,.1)}
+  100%{box-shadow:0 0 0 0 rgba(255,255,255,.2),inset 0 0 0 0 rgba(255,255,255,.1)}
 }
 .jpText{
-  position:relative; z-index:1; /* above pulse layer */
-  font-weight:900;font-size:clamp(24px,5vw,38px);
+  position:relative;z-index:1;
+  font-weight:900;font-size:clamp(30px,6.4vw,46px); /* bigger JP */
   color:#0b1530;text-align:center;text-shadow:0 1px 0 rgba(255,255,255,.6);
 }
 .hira{text-align:center;color:#d8e7ff;font-size:clamp(14px,3.5vw,18px);margin-bottom:20px}
 
-/* ===== Bank + Sentence ===== */
-.wordbank,.sentence{
-  display:flex;flex-wrap:wrap;gap:12px;justify-content:center;
-  min-height:64px;padding:12px;margin-bottom:14px;
-}
+/* containers */
+.wordbank,.sentence{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;min-height:64px;padding:12px;margin-bottom:14px;}
 .sentence{justify-content:flex-start;min-height:88px;border:1px dashed rgba(255,255,255,.25);border-radius:14px;padding:16px 12px}
 
 /* chips */
-.word{
-  padding:14px 18px;font-weight:900;font-size:clamp(18px,4.2vw,26px);
+.word{padding:14px 18px;font-weight:900;font-size:clamp(18px,4.2vw,26px);
   border:none;border-radius:20px;cursor:grab;user-select:none;
   box-shadow:0 0 0 4px var(--color),0 10px 22px rgba(0,0,0,.35);
-  background:#fff;color:#06101f;text-shadow:0 1px 0 rgba(255,255,255,.65);
-}
+  background:#fff;color:#06101f;text-shadow:0 1px 0 rgba(255,255,255,.65);}
 .word:active{transform:scale(.96)}
 
-/* Check */
+/* buttons */
 .btn{
   display:block;margin:20px auto;border:none;border-radius:999px;
   padding:16px 36px;font-weight:900;font-size:clamp(18px,4vw,22px);
   background:radial-gradient(circle at 30% 30%,#1ee99a,#15c473,#0ea85d);
   color:#00230f;text-shadow:0 1px 0 rgba(255,255,255,.5);
   box-shadow:0 0 0 5px rgba(34,197,94,.22),0 0 18px rgba(34,197,94,.8);
-  cursor:pointer;
+  cursor:pointer;opacity:1;transition:opacity .3s ease;
 }
+.btn:disabled{opacity:.4;cursor:not-allowed}
 
-/* reveal correct line on wrong */
-.correctLine{text-align:left;color:#cfe1ff;font-weight:700;margin-top:8px;opacity:0;transition:.3s}
+.correctLine{text-align:left;color:#cfe1ff;font-weight:700;margin-top:10px;opacity:0;transition:.3s}
 .correctLine.show{opacity:1}
+#okBtn{display:none}
 
 /* FX */
 .fx{position:fixed;inset:0;pointer-events:none;overflow:hidden}
-.heart{
-  position:absolute;color:var(--heart);font-size:clamp(50px,9vw,90px);
-  text-shadow:0 4px 0 rgba(0,0,0,.35);
-  animation:heartFly 1200ms ease-out forwards;
-}
+.heart{position:absolute;color:var(--heart);font-size:clamp(50px,9vw,90px);text-shadow:0 4px 0 rgba(0,0,0,.35);animation:heartFly 1200ms ease-out forwards;}
 @keyframes heartFly{0%{opacity:0;transform:translate(-50%,-20px) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-240px) scale(1.5)}}
-.smoke{
-  position:absolute;width:clamp(60px,15vw,160px);height:clamp(60px,15vw,160px);
-  border-radius:50%;background:radial-gradient(circle at 40% 40%,#fff,rgba(255,255,255,.7) 60%,rgba(255,255,255,0) 72%);
-  animation:smokeRise 1600ms ease-out forwards;filter:blur(1px);
-}
+.smoke{position:absolute;width:clamp(60px,15vw,160px);height:clamp(60px,15vw,160px);border-radius:50%;background:radial-gradient(circle at 40% 40%,#fff,rgba(255,255,255,.7) 60%,rgba(255,255,255,0) 72%);animation:smokeRise 1600ms ease-out forwards;filter:blur(1px);}
 @keyframes smokeRise{0%{opacity:0;transform:translate(-50%,0) scale(.6)}20%{opacity:.9}100%{opacity:0;transform:translate(-50%,-260px) scale(1.4)}}
 
 .end{text-align:center;padding:40px 10px 80px}
@@ -141,8 +114,11 @@ footer{text-align:center;color:#c9d4ec;font-family:'Cinzel',serif;font-weight:70
     <div id="bank" class="wordbank"></div>
     <div id="sentence" class="sentence"></div>
     <div id="correctLine" class="correctLine"></div>
-
-    <button id="checkBtn" class="btn">Check</button>
+    <div id="okWrap" style="text-align:center;display:none">
+      <div style="margin-top:8px">正しい文を読んで OK をクリック</div>
+      <button id="okBtn" class="btn" style="margin-top:10px;padding:10px 28px;font-size:clamp(16px,3.8vw,20px)">OK</button>
+    </div>
+    <button id="checkBtn" class="btn" disabled>Check</button>
   </div>
 
   <div id="end" class="end" style="display:none">
@@ -183,71 +159,107 @@ const SR6_10=new Audio("assets/audio/result_6-10.mp3");
 const SR15=new Audio("assets/audio/result_15.mp3");
 [SOK,SBAD,SR0_5,SR6_10,SR15].forEach(a=>{a.preload="auto";a.volume=1;});
 
-/* ===== State/DOM ===== */
-let order=shuffle([...DATA.keys()]);let i=0,score=0;
-const jp=document.getElementById('jp'),hira=document.getElementById('hira');
-const bank=document.getElementById('bank'),sent=document.getElementById('sentence');
-const check=document.getElementById('checkBtn'),correctLine=document.getElementById('correctLine');
-const fx=document.getElementById('fx'),panel=document.getElementById('panel');
-const end=document.getElementById('end'),scoreText=document.getElementById('scoreText'),msg=document.getElementById('msg');
+/* ===== State / DOM ===== */
+let order=shuffle([...DATA.keys()]);
+let i=0,score=0;
 
+const jp=document.getElementById('jp');
+const hira=document.getElementById('hira');
+const bank=document.getElementById('bank');
+const sent=document.getElementById('sentence');
+const check=document.getElementById('checkBtn');
+const correctLine=document.getElementById('correctLine');
+const okWrap=document.getElementById('okWrap');
+const okBtn=document.getElementById('okBtn');
+const fx=document.getElementById('fx');
+const panel=document.getElementById('panel');
+const end=document.getElementById('end');
+const scoreText=document.getElementById('scoreText');
+const msg=document.getElementById('msg');
+
+/* ===== Mount ===== */
 function mount(){
-  bank.innerHTML='';sent.innerHTML='';correctLine.textContent='';correctLine.classList.remove('show');
-  const item=DATA[order[i]];jp.textContent=item.jp;hira.textContent=item.hira||'';
+  bank.innerHTML=''; sent.innerHTML='';
+  correctLine.textContent=''; correctLine.classList.remove('show');
+  okWrap.style.display='none'; check.disabled=true;
+
+  const item=DATA[order[i]];
+  jp.textContent=item.jp;
+  hira.textContent=item.hira || '';
+
   const words=item.en.trim().split(/\s+/);
   shuffle(words).forEach((w,idx)=>{
     const b=document.createElement('button');
-    b.textContent=w;b.className='word';b.style.setProperty('--color',chipColor(idx));
+    b.textContent=w; b.className='word';
+    b.style.setProperty('--color', chipColor(idx));
     b.draggable=true;
     b.addEventListener('dragstart',()=>b.classList.add('drag'));
     b.addEventListener('dragend',()=>b.classList.remove('drag'));
     bank.appendChild(b);
   });
+  checkWords();
 }
 
-/* drag into sentence (disappear from bank); drag back allowed */
+/* enable/disable Check based on whether bank is empty */
+function checkWords(){
+  check.disabled = bank.children.length !== 0;
+}
+
+/* Drag n’ drop: disappear from bank, allow drag-back */
 ['bank','sentence'].forEach(id=>{
   const area=document.getElementById(id);
   area.addEventListener('dragover',e=>e.preventDefault());
   area.addEventListener('drop',e=>{
     e.preventDefault();
-    const drag=document.querySelector('.drag');if(!drag)return;
+    const drag=document.querySelector('.drag'); if(!drag) return;
     area.appendChild(drag);
+    checkWords();
   });
 });
 
-check.onclick=async ()=>{
+/* ===== Check flow ===== */
+check.onclick = async ()=>{
   const item=DATA[order[i]];
   const built=[...sent.children].map(e=>e.textContent).join(' ').trim();
   const correct=item.en.trim();
 
   if(built===correct){
-    score++; bigHearts(sent); playSafely(SOK);
-    await wait(2000); // fixed 2s beat before next
+    score++; bigHearts(sent); playSafe(SOK);
+    await wait(2000);          // 2s beat so audio/FX feel complete
+    next();
   }else{
-    correctLine.textContent="正解："+correct; correctLine.classList.add('show');
-    hugeSmoke(sent); playSafely(SBAD);
-    await wait(2000);
+    correctLine.textContent = "正解：" + correct;
+    correctLine.classList.add('show');
+    hugeSmoke(sent); playSafe(SBAD);
+    okWrap.style.display='block'; // student reads then advances
   }
-  next();
 };
 
+/* Student advances after reading the correct answer */
+okBtn.onclick = ()=>{ okWrap.style.display='none'; next(); };
+
 function next(){
-  i++; if(i>=DATA.length){finish();return;}
+  i++;
+  if(i>=DATA.length){ finish(); return; }
   mount();
 }
 
+/* ===== Finish screen ===== */
 function finish(){
-  panel.style.display='none'; end.style.display='block';
-  const pct=Math.round(score/DATA.length*100);
-  scoreText.textContent=`スコア：${score}/${DATA.length}（${pct}%）`;
-  let line="",s=null;
-  if(score<=5){line="だめだ〜！アニメをやめて、ブーリキュラムを見よう！";s=SR0_5;}
-  else if(score<=10){line="えっ？YouTubeばかり。Boo-tube を見よう！";s=SR6_10;}
-  else if(score<=14){line="いいね！でも満点を目指そう。";s=SR15;}
-  else{line="あなたは超天才！";s=SR15;}
-  msg.textContent=line; playSafely(s);
-  bigHearts(document.body,100);
+  panel.style.display='none';
+  end.style.display='block';
+  const pct = Math.round(score/DATA.length*100);
+  scoreText.textContent = `スコア：${score}/${DATA.length}（${pct}%）`;
+
+  let line="", snd=null;
+  if(score<=5){ line="だめだ〜！アニメをやめて、ブーリキュラムを見よう！"; snd=SR0_5; }
+  else if(score<=10){ line="えっ？YouTubeばかり。Boo-tube を見よう！"; snd=SR6_10; }
+  else if(score<=14){ line="いいね！でも満点を目指そう。"; snd=SR15; }
+  else { line="あなたは超天才！"; snd=SR15; }
+
+  msg.textContent = line;
+  playSafe(snd);
+  bigHearts(document.body, 100);
 }
 
 /* ===== FX ===== */
@@ -258,7 +270,8 @@ function bigHearts(el,count=60){
     const dx=(Math.random()*window.innerWidth-window.innerWidth/2)*0.3;
     const dy=(Math.random()*200-100)*0.3;
     h.style.left=(x+dx)+'px'; h.style.top=(y+dy)+'px';
-    fx.appendChild(h); setTimeout(()=>h.remove(),1400);
+    fx.appendChild(h);
+    setTimeout(()=>h.remove(),1400);
   }
 }
 function hugeSmoke(el,count=30){
@@ -267,18 +280,25 @@ function hugeSmoke(el,count=30){
     const s=document.createElement('div'); s.className='smoke';
     const a=(Math.random()*Math.PI)-Math.PI/2; const d=Math.random()*260;
     s.style.left=(x+Math.cos(a)*d)+'px'; s.style.top=(y+Math.sin(a)*d*0.4)+'px';
-    fx.appendChild(s); setTimeout(()=>s.remove(),1600);
+    fx.appendChild(s);
+    setTimeout(()=>s.remove(),1600);
   }
 }
 
 /* ===== Utils ===== */
 function chipColor(n){
   const c=["#ff6ec7","#5ee6ff","#ffd166","#8aff80","#c77dff","#fff680","#ff9a8b","#9bffb7","#7cc6ff","#f7a6ff"];
-  return c[n%c.length];
+  return c[n % c.length];
 }
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
-function wait(ms){return new Promise(r=>setTimeout(r,ms));}
-function playSafely(a){try{a.currentTime=0; a.play();}catch{}}
+function shuffle(a){
+  for(let i=a.length-1;i>0;i--){
+    const j=(Math.random()*(i+1))|0;
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function wait(ms){ return new Promise(res=>setTimeout(res,ms)); }
+function playSafe(a){ try{ a.currentTime=0; a.play(); } catch{} }
 
 /* go */
 mount();
