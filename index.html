@@ -21,7 +21,7 @@ body{
   font-family:system-ui,"Noto Sans JP",sans-serif;-webkit-overflow-scrolling:touch;
 }
 
-/* Header (game pages only; not shown on results) */
+/* Header */
 header{text-align:center;padding:26px 12px 12px}
 .h1{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(34px,6.2vw,56px);letter-spacing:.5px;text-transform:uppercase;}
 .h2{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(22px,4.5vw,36px);margin-top:6px;}
@@ -48,16 +48,30 @@ header{text-align:center;padding:26px 12px 12px}
   position:relative;
   z-index:1;
   font-weight:900;
-  font-size:clamp(28px,6.4vw,46px);
+  font-size:46px;
   color:#0b1530;
   text-align:center;
   text-shadow:0 1px 0 rgba(255,255,255,.6);
-  white-space:nowrap;           /* Prevents Japanese text from wrapping */
-  max-width:90vw;               /* Keeps long text within mobile screen width */
-  overflow:hidden;              /* Hides overflow cleanly */
-  text-overflow:ellipsis;       /* Adds "…" if it ever exceeds width */
+  white-space:nowrap;
+  overflow:visible;
 }
 
+.hira{
+  text-align:center;
+  color:#d8e7ff;
+  font-size:clamp(14px,3.5vw,18px);
+  margin-bottom:20px;
+}
+
+@media (max-width:480px){
+  .jpCard{height:178px;}
+  .hira{
+    text-align:center;
+    max-width:92vw;
+    margin:10px auto 20px;
+    line-height:1.3;
+  }
+}
 
 /* areas */
 .wordbank,.sentence{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;min-height:64px;padding:12px;margin-bottom:14px;}
@@ -98,7 +112,7 @@ header{text-align:center;padding:26px 12px 12px}
 .smoke{position:absolute;width:clamp(60px,15vw,160px);height:clamp(60px,15vw,160px);border-radius:50%;background:radial-gradient(circle at 40% 40%,#fff,rgba(255,255,255,.7) 60%,rgba(255,255,255,0) 72%);animation:smokeRise 1600ms ease-out forwards;filter:blur(1px);}
 @keyframes smokeRise{0%{opacity:0;transform:translate(-50%,0) scale(.6)}20%{opacity:.9}100%{opacity:0;transform:translate(-50%,-260px) scale(1.4)}}
 
-/* End/result screens (overlay, no header) */
+/* End/result screens */
 .end{
   position:fixed;inset:0;display:none;flex-direction:column;
   align-items:center;justify-content:center;text-align:center;
@@ -156,7 +170,7 @@ footer{text-align:center;color:#c9d4ec;font-family:'Cinzel',serif;font-weight:70
   </div>
 </div>
 
-<!-- Results overlay (no header) -->
+<!-- Results overlay -->
 <div id="end" class="end">
   <div class="msg" id="endMsg"></div>
   <div class="score" id="scoreText"></div>
@@ -164,9 +178,7 @@ footer{text-align:center;color:#c9d4ec;font-family:'Cinzel',serif;font-weight:70
   <footer style="opacity:.85">Bryan’s English School</footer>
 </div>
 
-<!-- FX layer -->
 <div id="fx" class="fx"></div>
-
 <footer>Bryan’s English School</footer>
 
 <script>
@@ -217,12 +229,35 @@ const end=document.getElementById('end');
 const scoreText=document.getElementById('scoreText');
 const endMsg=document.getElementById('endMsg');
 
-/* Timing constants */
-const HEART_MS=1200;         // heart animation length
-const CORRECT_PAUSE=2200;    // grace time after correct
-const FINAL_GRACE=1200;      // small delay before results
+/* ===== JP Text Auto-Fit ===== */
+function fitJPText(){
+  const el = jp;
+  if(!el) return;
+  const MAX = 46;
+  const MIN = 18;
+  let size = MAX;
+  el.style.fontSize = size + 'px';
+  el.style.whiteSpace = 'nowrap';
+  const card = el.closest('.jpCard');
+  const limit = (card ? card.clientWidth : el.clientWidth) - 16;
+  let guard = 0;
+  while (el.scrollWidth > limit && size > MIN && guard < 40){
+    size -= 1;
+    el.style.fontSize = size + 'px';
+    guard++;
+  }
+}
+let _fitTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(_fitTimer);
+  _fitTimer = setTimeout(fitJPText, 120);
+});
 
-/* ===== Mount ===== */
+/* ===== Main Logic ===== */
+const HEART_MS=1200;
+const CORRECT_PAUSE=2200;
+const FINAL_GRACE=1200;
+
 function mount(){
   bank.innerHTML=''; sent.innerHTML='';
   correctLine.textContent=''; correctLine.classList.remove('show');
@@ -232,6 +267,7 @@ function mount(){
 
   const item=DATA[order[i]];
   jp.textContent=item.jp;
+  fitJPText(); // auto-fit Japanese
   hira.textContent=item.hira || '';
 
   const words=item.en.trim().split(/\s+/);
@@ -247,10 +283,8 @@ function mount(){
   checkWords();
 }
 
-/* enable/disable Check based on whether bank is empty */
 function checkWords(){ check.disabled = bank.children.length !== 0; }
 
-/* Drag n’ drop: disappear from bank, allow drag-back */
 ['bank','sentence'].forEach(id=>{
   const area=document.getElementById(id);
   area.addEventListener('dragover',e=>e.preventDefault());
@@ -262,7 +296,6 @@ function checkWords(){ check.disabled = bank.children.length !== 0; }
   });
 });
 
-/* ===== Check flow ===== */
 check.onclick = async ()=>{
   const item=DATA[order[i]];
   const built=[...sent.children].map(e=>e.textContent).join(' ').trim();
@@ -270,37 +303,25 @@ check.onclick = async ()=>{
 
   if(built===correct){
     score++;
-
-    /* Guaranteed sugoi playback (reset + safe play) */
     await playSafe(SOK);
-
-    /* Hearts FX */
     bigHearts(sent);
-
-    /* Wait long enough for audio + hearts before advancing */
     await wait(CORRECT_PAUSE);
-
     next();
   }else{
     correctLine.textContent = "正解：" + correct;
     correctLine.classList.add('show');
-
     hugeSmoke(sent);
     playSafe(SBAD);
-
-    // swap to blue OK flow
     check.style.display='none';
     okWrap.style.display='block';
   }
 };
 
-/* Student advances after reading the correct answer */
 okBtn.onclick = ()=>{ okWrap.style.display='none'; next(); };
 
 function next(){
   i++;
   if(i>=DATA.length){
-    // Final grace to avoid cutting any pending sounds/FX
     setTimeout(finish, FINAL_GRACE);
     return;
   }
@@ -309,38 +330,30 @@ function next(){
 
 function updateProgress(){
   const n=i+1, total=DATA.length;
-  const pct=Math.round(((n-1)/total)*100); // progress *before* answering
+  const pct=Math.round(((n-1)/total)*100);
   progress.textContent = `${n} / ${total}（${pct}%）`;
 }
 
-/* ===== Finish screen ===== */
 function finish(){
   panel.style.display='none';
   end.style.display='flex';
-
   const pct = Math.round((score/DATA.length)*100);
   scoreText.textContent = `スコア：${score}/${DATA.length}（${pct}%）`;
 
   let theme = "blue", msgText = "", audio = SR11_14;
-  if(score <= 5){ theme="red";    msgText="ブーリキュラム見てないでしょ！";            audio=SR0_5; }
+  if(score <= 5){ theme="red"; msgText="ブーリキュラム見てないでしょ！"; audio=SR0_5; }
   else if(score <= 10){ theme="orange"; msgText="YouTubeばかりじゃなくて、Boo-tube 見よう！"; audio=SR6_10; }
-  else if(score <= 14){ theme="blue";   msgText="いいね！でも満点を目指そう。";             audio=SR11_14; }
-  else { theme="gold";  msgText="あなたは超天才！"; audio=SR15; }
+  else if(score <= 14){ theme="blue"; msgText="いいね！でも満点を目指そう。"; audio=SR11_14; }
+  else { theme="gold"; msgText="あなたは超天才！"; audio=SR15; }
 
   end.className = `end ${theme}`;
   endMsg.textContent = msgText;
-
-  // Play result audio
   playSafe(audio);
-
-  // Only gold rains confetti
   if(theme==="gold"){ rainConfetti(); }
-
-  // A small celebratory heart burst, but lighter than gameplay
   bigHearts(document.body, 35);
 }
 
-/* ===== FX ===== */
+/* ===== FX + Utils ===== */
 function bigHearts(el,count=35){
   const r=el.getBoundingClientRect(); const x=r.left+r.width/2, y=r.top+r.height/2;
   for(let k=0;k<count;k++){
@@ -362,8 +375,6 @@ function hugeSmoke(el,count=18){
     setTimeout(()=>s.remove(),1600);
   }
 }
-
-/* Gold page confetti rain */
 function rainConfetti(){
   const colors=[
     getComputedStyle(document.documentElement).getPropertyValue('--pink').trim() || '#ff7eb9',
@@ -380,8 +391,6 @@ function rainConfetti(){
     end.appendChild(c);
   }
 }
-
-/* ===== Utils ===== */
 function chipColor(n){
   const c=["#ff6ec7","#5ee6ff","#ffd166","#8aff80","#c77dff","#fff680","#ff9a8b","#9bffb7","#7cc6ff","#f7a6ff"];
   return c[n % c.length];
@@ -394,19 +403,10 @@ function shuffle(a){
   return a;
 }
 function wait(ms){ return new Promise(res=>setTimeout(res,ms)); }
-
-/* Robust audio play: pause→reset→play, returned as a promise */
 function playSafe(a){
-  try{
-    a.pause();
-    a.currentTime=0;
-    const p=a.play();
-    if(p && typeof p.then==="function"){ return p.catch(()=>{}); }
-  }catch(e){}
-  return Promise.resolve();
+  try{ a.pause(); a.currentTime=0; const p=a.play(); if(p&&p.then)p.catch(()=>{}); }
+  catch(e){}
 }
-
-/* go */
 mount();
 </script>
 </body>
