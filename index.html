@@ -44,8 +44,20 @@ header{text-align:center;padding:26px 12px 12px}
   background-size:100% 600px;animation:stripeSlide 18s linear infinite;
 }
 @keyframes stripeSlide{from{background-position-y:0}to{background-position-y:-600px}}
-.jpText{position:relative;z-index:1;font-weight:900;font-size:clamp(30px,6.4vw,46px);color:#0b1530;text-align:center;text-shadow:0 1px 0 rgba(255,255,255,.6);}
-.hira{text-align:center;color:#d8e7ff;font-size:clamp(14px,3.5vw,18px);margin-bottom:20px}
+.jpText{
+  position:relative;
+  z-index:1;
+  font-weight:900;
+  font-size:clamp(28px,6.4vw,46px);
+  color:#0b1530;
+  text-align:center;
+  text-shadow:0 1px 0 rgba(255,255,255,.6);
+  white-space:nowrap;           /* Prevents Japanese text from wrapping */
+  max-width:90vw;               /* Keeps long text within mobile screen width */
+  overflow:hidden;              /* Hides overflow cleanly */
+  text-overflow:ellipsis;       /* Adds "…" if it ever exceeds width */
+}
+
 
 /* areas */
 .wordbank,.sentence{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;min-height:64px;padding:12px;margin-bottom:14px;}
