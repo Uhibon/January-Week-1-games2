@@ -11,6 +11,8 @@
   --bg:#0b1530; --ink:#fff; --outline:#ffffff26;
   --ok:#22c55e; --heart:#ff4fa6;
   --radius:26px;
+
+  /* Booha confetti palette */
   --pink:#ff7eb9; --mint:#a6f7b2; --blue:#7dd3fc; --yellow:#fff680;
 }
 *{box-sizing:border-box}
@@ -18,6 +20,8 @@ body{
   margin:0;background:#0b1530;color:var(--ink);
   font-family:system-ui,"Noto Sans JP",sans-serif;-webkit-overflow-scrolling:touch;
 }
+
+/* Header (game pages only; not shown on results) */
 header{text-align:center;padding:26px 12px 12px}
 .h1{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(34px,6.2vw,56px);letter-spacing:.5px;text-transform:uppercase;}
 .h2{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(22px,4.5vw,36px);margin-top:6px;}
@@ -29,6 +33,7 @@ header{text-align:center;padding:26px 12px 12px}
   background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
   box-shadow:0 6px 24px rgba(0,0,0,.4);}
 
+/* JP Card – horizontal candy stripes */
 .jpCard{
   position:relative;border-radius:var(--radius);overflow:hidden;
   border:1px solid var(--outline);height:160px;margin-bottom:10px;
@@ -39,28 +44,21 @@ header{text-align:center;padding:26px 12px 12px}
   background-size:100% 600px;animation:stripeSlide 18s linear infinite;
 }
 @keyframes stripeSlide{from{background-position-y:0}to{background-position-y:-600px}}
-.jpCard::after{
-  content:"";position:absolute;inset:0;border-radius:inherit;z-index:0;
-  animation:pulse 3s ease-in-out infinite;
-  box-shadow:0 0 0 0 rgba(255,255,255,.2),inset 0 0 0 0 rgba(255,255,255,.1);
-}
-@keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(255,255,255,.2)}
-  50%{box-shadow:0 0 40px 6px rgba(255,255,255,.25)}
-  100%{box-shadow:0 0 0 0 rgba(255,255,255,.2)}
-}
 .jpText{position:relative;z-index:1;font-weight:900;font-size:clamp(30px,6.4vw,46px);color:#0b1530;text-align:center;text-shadow:0 1px 0 rgba(255,255,255,.6);}
 .hira{text-align:center;color:#d8e7ff;font-size:clamp(14px,3.5vw,18px);margin-bottom:20px}
 
+/* areas */
 .wordbank,.sentence{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;min-height:64px;padding:12px;margin-bottom:14px;}
 .sentence{justify-content:flex-start;min-height:88px;border:1px dashed rgba(255,255,255,.25);border-radius:14px;padding:16px 12px}
 
+/* chips */
 .word{padding:14px 18px;font-weight:900;font-size:clamp(18px,4.2vw,26px);
   border:none;border-radius:20px;cursor:grab;user-select:none;
   box-shadow:0 0 0 4px var(--color),0 10px 22px rgba(0,0,0,.35);
   background:#fff;color:#06101f;text-shadow:0 1px 0 rgba(255,255,255,.65);}
 .word:active{transform:scale(.96)}
 
+/* buttons */
 .btn{
   display:block;margin:16px auto 8px;border:none;border-radius:999px;
   padding:16px 36px;font-weight:900;font-size:clamp(18px,4vw,22px);
@@ -75,37 +73,38 @@ header{text-align:center;padding:26px 12px 12px}
   color:#00163a;
   box-shadow:0 0 0 5px rgba(62,144,255,.25), 0 0 18px rgba(62,144,255,.85);
 }
+
+/* progress + correct line */
 #progress{text-align:center;color:#cfe1ff;opacity:.9;font-weight:700;margin-top:2px}
 .correctLine{text-align:center;color:#ffffff;font-weight:900;font-size:clamp(18px,4.8vw,28px);margin-top:12px;opacity:0;transition:.3s}
 .correctLine.show{opacity:1}
 
-/* FX */
+/* FX layers */
 .fx{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1000}
 .heart{position:absolute;color:var(--heart);font-size:clamp(50px,9vw,90px);text-shadow:0 4px 0 rgba(0,0,0,.35);animation:heartFly 1200ms ease-out forwards;}
 @keyframes heartFly{0%{opacity:0;transform:translate(-50%,-20px) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-240px) scale(1.5)}}
 .smoke{position:absolute;width:clamp(60px,15vw,160px);height:clamp(60px,15vw,160px);border-radius:50%;background:radial-gradient(circle at 40% 40%,#fff,rgba(255,255,255,.7) 60%,rgba(255,255,255,0) 72%);animation:smokeRise 1600ms ease-out forwards;filter:blur(1px);}
 @keyframes smokeRise{0%{opacity:0;transform:translate(-50%,0) scale(.6)}20%{opacity:.9}100%{opacity:0;transform:translate(-50%,-260px) scale(1.4)}}
 
-/* End screens */
+/* End/result screens (overlay, no header) */
 .end{
   position:fixed;inset:0;display:none;flex-direction:column;
-  align-items:center;justify-content:flex-start;text-align:center;
+  align-items:center;justify-content:center;text-align:center;
   padding:0 10px;overflow:hidden;
 }
-.end header{margin-bottom:20px}
-.end .msg{font-weight:900;font-size:clamp(24px,5.6vw,40px);margin:20px auto 10px;text-align:center;}
-.end .score{font-weight:900;font-size:clamp(22px,5vw,30px);margin:4px auto 20px;text-align:center;}
+.end .msg{font-weight:900;font-size:clamp(26px,6vw,42px);margin:10px auto;}
+.end .score{font-weight:900;font-size:clamp(22px,5vw,30px);margin:10px auto 20px;}
+.end.red   {background:#a30606;animation:endGlowRed 3s ease-in-out infinite}
+.end.orange{background:#b85c00;animation:endGlowOrange 3s ease-in-out infinite}
+.end.blue  {background:#063a8f;animation:endGlowBlue 3s ease-in-out infinite}
+.end.gold  {background:#b58900;animation:endGlowGold 3s ease-in-out infinite;position:relative;}
 
-.end.red   {background:#a30606; animation:endGlowRed 3s ease-in-out infinite}
-.end.orange{background:#b85c00; animation:endGlowOrange 3s ease-in-out infinite}
-.end.blue  {background:#063a8f; animation:endGlowBlue 3s ease-in-out infinite}
-.end.gold  {background:#b58900; animation:endGlowGold 3s ease-in-out infinite;position:relative;}
 @keyframes endGlowRed{50%{box-shadow:inset 0 0 180px 40px rgba(255,80,80,.65)}}
 @keyframes endGlowOrange{50%{box-shadow:inset 0 0 180px 40px rgba(255,166,58,.65)}}
 @keyframes endGlowBlue{50%{box-shadow:inset 0 0 180px 40px rgba(88,160,255,.65)}}
 @keyframes endGlowGold{50%{box-shadow:inset 0 0 180px 40px rgba(255,215,96,.7)}}
 
-/* Booha pastel confetti */
+/* Booha pastel confetti (gold only) */
 .confetti{
   position:absolute;width:12px;height:12px;top:-20px;
   animation:confettiFall 3s linear infinite;
@@ -130,35 +129,36 @@ footer{text-align:center;color:#c9d4ec;font-family:'Cinzel',serif;font-weight:70
   <div class="panel" id="panel">
     <div class="jpCard"><div id="jp" class="jpText"></div></div>
     <div id="hira" class="hira"></div>
+
     <div id="bank" class="wordbank"></div>
     <div id="sentence" class="sentence"></div>
+
     <div id="correctLine" class="correctLine"></div>
     <div id="okWrap" style="text-align:center;display:none">
       <div style="margin-top:8px">正しい文を読んで OK をクリック</div>
       <button id="okBtn" class="btn blue" style="margin-top:10px;padding:10px 28px;font-size:clamp(16px,3.8vw,20px)">OK</button>
     </div>
+
     <button id="checkBtn" class="btn" disabled>Check</button>
     <div id="progress">1 / 15（0%）</div>
   </div>
 </div>
 
+<!-- Results overlay (no header) -->
 <div id="end" class="end">
-  <header>
-    <div class="h1">THE BOO-RICULUM</div>
-    <div class="h2">GAMES &amp; QUIZZES</div>
-    <div class="h3">January Week 1 – Sentences</div>
-    <div class="h4">１月第１週 – 文の練習</div>
-  </header>
   <div class="msg" id="endMsg"></div>
   <div class="score" id="scoreText"></div>
   <button class="btn" onclick="window.location.href='index.html'">メインメニューに戻る (Return to MAIN MENU)</button>
   <footer style="opacity:.85">Bryan’s English School</footer>
 </div>
 
+<!-- FX layer -->
 <div id="fx" class="fx"></div>
+
 <footer>Bryan’s English School</footer>
 
 <script>
+/* ===== Data ===== */
 const DATA=[
   {en:"I will study every day.",jp:"毎日勉強します。",hira:"まいにち べんきょう します"},
   {en:"I’m going to try something new.",jp:"新しいことに挑戦します。",hira:"あたらしい こと に ちょうせん します"},
@@ -177,125 +177,224 @@ const DATA=[
   {en:"I will enjoy learning.",jp:"学ぶことを楽しみます。",hira:"まなぶ こと を たのしみ ます"}
 ];
 
+/* ===== Audio ===== */
 const SOK=new Audio("assets/audio/sugoi.mp3");
 const SBAD=new Audio("assets/audio/yada.mp3");
 const SR0_5=new Audio("assets/audio/result_0-5.mp3");
 const SR6_10=new Audio("assets/audio/result_6-10.mp3");
+const SR11_14=new Audio("assets/audio/result_11-14.mp3");
 const SR15=new Audio("assets/audio/result_15.mp3");
-[SOK,SBAD,SR0_5,SR6_10,SR15].forEach(a=>{a.preload="auto";a.volume=1;});
+[SOK,SBAD,SR0_5,SR6_10,SR11_14,SR15].forEach(a=>{a.preload="auto";a.volume=1;});
 
+/* ===== State / DOM ===== */
 let order=shuffle([...DATA.keys()]);
 let i=0,score=0;
-const jp=document.getElementById('jp'),hira=document.getElementById('hira'),
-bank=document.getElementById('bank'),sent=document.getElementById('sentence'),
-check=document.getElementById('checkBtn'),progress=document.getElementById('progress'),
-correctLine=document.getElementById('correctLine'),okWrap=document.getElementById('okWrap'),
-okBtn=document.getElementById('okBtn'),fx=document.getElementById('fx'),panel=document.getElementById('panel'),
-end=document.getElementById('end'),scoreText=document.getElementById('scoreText'),endMsg=document.getElementById('endMsg');
 
+const jp=document.getElementById('jp');
+const hira=document.getElementById('hira');
+const bank=document.getElementById('bank');
+const sent=document.getElementById('sentence');
+const check=document.getElementById('checkBtn');
+const progress=document.getElementById('progress');
+const correctLine=document.getElementById('correctLine');
+const okWrap=document.getElementById('okWrap');
+const okBtn=document.getElementById('okBtn');
+const fx=document.getElementById('fx');
+const panel=document.getElementById('panel');
+const end=document.getElementById('end');
+const scoreText=document.getElementById('scoreText');
+const endMsg=document.getElementById('endMsg');
+
+/* Timing constants */
+const HEART_MS=1200;         // heart animation length
+const CORRECT_PAUSE=2200;    // grace time after correct
+const FINAL_GRACE=1200;      // small delay before results
+
+/* ===== Mount ===== */
 function mount(){
-  bank.innerHTML='';sent.innerHTML='';correctLine.textContent='';
-  correctLine.classList.remove('show');okWrap.style.display='none';
-  check.disabled=true;check.style.display='block';updateProgress();
+  bank.innerHTML=''; sent.innerHTML='';
+  correctLine.textContent=''; correctLine.classList.remove('show');
+  okWrap.style.display='none';
+  check.disabled=true; check.style.display='block';
+  updateProgress();
+
   const item=DATA[order[i]];
-  jp.textContent=item.jp;hira.textContent=item.hira||'';
+  jp.textContent=item.jp;
+  hira.textContent=item.hira || '';
+
   const words=item.en.trim().split(/\s+/);
   shuffle(words).forEach((w,idx)=>{
-    const b=document.createElement('button');b.textContent=w;b.className='word';
-    b.style.setProperty('--color',chipColor(idx));b.draggable=true;
+    const b=document.createElement('button');
+    b.textContent=w; b.className='word';
+    b.style.setProperty('--color', chipColor(idx));
+    b.draggable=true;
     b.addEventListener('dragstart',()=>b.classList.add('drag'));
     b.addEventListener('dragend',()=>b.classList.remove('drag'));
     bank.appendChild(b);
-  });checkWords();
+  });
+  checkWords();
 }
-function checkWords(){check.disabled=bank.children.length!==0;}
+
+/* enable/disable Check based on whether bank is empty */
+function checkWords(){ check.disabled = bank.children.length !== 0; }
+
+/* Drag n’ drop: disappear from bank, allow drag-back */
 ['bank','sentence'].forEach(id=>{
   const area=document.getElementById(id);
   area.addEventListener('dragover',e=>e.preventDefault());
   area.addEventListener('drop',e=>{
-    e.preventDefault();const drag=document.querySelector('.drag');if(!drag)return;
-    area.appendChild(drag);checkWords();
+    e.preventDefault();
+    const drag=document.querySelector('.drag'); if(!drag) return;
+    area.appendChild(drag);
+    checkWords();
   });
 });
-check.onclick=async()=>{
+
+/* ===== Check flow ===== */
+check.onclick = async ()=>{
   const item=DATA[order[i]];
   const built=[...sent.children].map(e=>e.textContent).join(' ').trim();
   const correct=item.en.trim();
+
   if(built===correct){
     score++;
-    playSafe(SOK);
+
+    /* Guaranteed sugoi playback (reset + safe play) */
+    await playSafe(SOK);
+
+    /* Hearts FX */
     bigHearts(sent);
-    await wait(2000); // ensure hearts/audio finish
+
+    /* Wait long enough for audio + hearts before advancing */
+    await wait(CORRECT_PAUSE);
+
     next();
   }else{
-    correctLine.textContent="正解："+correct;
+    correctLine.textContent = "正解：" + correct;
     correctLine.classList.add('show');
-    hugeSmoke(sent);playSafe(SBAD);
-    check.style.display='none';okWrap.style.display='block';
+
+    hugeSmoke(sent);
+    playSafe(SBAD);
+
+    // swap to blue OK flow
+    check.style.display='none';
+    okWrap.style.display='block';
   }
 };
-okBtn.onclick=()=>{okWrap.style.display='none';next();};
+
+/* Student advances after reading the correct answer */
+okBtn.onclick = ()=>{ okWrap.style.display='none'; next(); };
+
 function next(){
   i++;
-  if(i>=DATA.length){setTimeout(finish,1200);return;}
+  if(i>=DATA.length){
+    // Final grace to avoid cutting any pending sounds/FX
+    setTimeout(finish, FINAL_GRACE);
+    return;
+  }
   mount();
 }
+
 function updateProgress(){
-  const n=i+1,total=DATA.length;
-  const pct=Math.round(((n-1)/total)*100);
-  progress.textContent=`${n} / ${total}（${pct}%）`;
+  const n=i+1, total=DATA.length;
+  const pct=Math.round(((n-1)/total)*100); // progress *before* answering
+  progress.textContent = `${n} / ${total}（${pct}%）`;
 }
+
+/* ===== Finish screen ===== */
 function finish(){
-  panel.style.display='none';end.style.display='flex';
-  const pct=Math.round((score/DATA.length)*100);
-  scoreText.textContent=`スコア：${score}/${DATA.length}（${pct}%）`;
-  let theme="blue",msgText="";
-  if(score<=5){theme="red";msgText="ブーリキュラム見てないでしょ！";}
-  else if(score<=10){theme="orange";msgText="YouTubeばかりじゃなくて、Boo-tube 見よう！";}
-  else if(score<=14){theme="blue";msgText="いいね！でも満点を目指そう。";}
-  else{theme="gold";msgText="あなたは超天才！";rainConfetti();}
-  end.className=`end ${theme}`;endMsg.textContent=msgText;
-  playSafe(theme==="red"?SR0_5:theme==="orange"?SR6_10:SR15);
-  bigHearts(document.body,35);
+  panel.style.display='none';
+  end.style.display='flex';
+
+  const pct = Math.round((score/DATA.length)*100);
+  scoreText.textContent = `スコア：${score}/${DATA.length}（${pct}%）`;
+
+  let theme = "blue", msgText = "", audio = SR11_14;
+  if(score <= 5){ theme="red";    msgText="ブーリキュラム見てないでしょ！";            audio=SR0_5; }
+  else if(score <= 10){ theme="orange"; msgText="YouTubeばかりじゃなくて、Boo-tube 見よう！"; audio=SR6_10; }
+  else if(score <= 14){ theme="blue";   msgText="いいね！でも満点を目指そう。";             audio=SR11_14; }
+  else { theme="gold";  msgText="あなたは超天才！"; audio=SR15; }
+
+  end.className = `end ${theme}`;
+  endMsg.textContent = msgText;
+
+  // Play result audio
+  playSafe(audio);
+
+  // Only gold rains confetti
+  if(theme==="gold"){ rainConfetti(); }
+
+  // A small celebratory heart burst, but lighter than gameplay
+  bigHearts(document.body, 35);
 }
+
+/* ===== FX ===== */
 function bigHearts(el,count=35){
-  const r=el.getBoundingClientRect();const x=r.left+r.width/2,y=r.top+r.height/2;
+  const r=el.getBoundingClientRect(); const x=r.left+r.width/2, y=r.top+r.height/2;
   for(let k=0;k<count;k++){
-    const h=document.createElement('div');h.className='heart';h.textContent='❤';
+    const h=document.createElement('div'); h.className='heart'; h.textContent='❤';
     const dx=(Math.random()*window.innerWidth-window.innerWidth/2)*0.3;
     const dy=(Math.random()*200-100)*0.3;
-    h.style.left=(x+dx)+'px';h.style.top=(y+dy)+'px';
-    fx.appendChild(h);setTimeout(()=>h.remove(),1400);
+    h.style.left=(x+dx)+'px'; h.style.top=(y+dy)+'px';
+    fx.appendChild(h);
+    setTimeout(()=>h.remove(),HEART_MS+200);
   }
 }
 function hugeSmoke(el,count=18){
-  const r=el.getBoundingClientRect();const x=r.left+r.width/2,y=r.top+r.height/2;
+  const r=el.getBoundingClientRect(); const x=r.left+r.width/2, y=r.top+r.height/2;
   for(let k=0;k<count;k++){
-    const s=document.createElement('div');s.className='smoke';
-    const a=(Math.random()*Math.PI)-Math.PI/2;const d=Math.random()*260;
-    s.style.left=(x+Math.cos(a)*d)+'px';s.style.top=(y+Math.sin(a)*d*0.4)+'px';
-    fx.appendChild(s);setTimeout(()=>s.remove(),1600);
+    const s=document.createElement('div'); s.className='smoke';
+    const a=(Math.random()*Math.PI)-Math.PI/2; const d=Math.random()*260;
+    s.style.left=(x+Math.cos(a)*d)+'px'; s.style.top=(y+Math.sin(a)*d*0.4)+'px';
+    fx.appendChild(s);
+    setTimeout(()=>s.remove(),1600);
   }
 }
+
+/* Gold page confetti rain */
 function rainConfetti(){
-  const gold=end;
-  const colors=[getComputedStyle(document.documentElement).getPropertyValue('--pink'),
-                getComputedStyle(document.documentElement).getPropertyValue('--mint'),
-                getComputedStyle(document.documentElement).getPropertyValue('--blue'),
-                getComputedStyle(document.documentElement).getPropertyValue('--yellow')];
+  const colors=[
+    getComputedStyle(document.documentElement).getPropertyValue('--pink').trim() || '#ff7eb9',
+    getComputedStyle(document.documentElement).getPropertyValue('--mint').trim() || '#a6f7b2',
+    getComputedStyle(document.documentElement).getPropertyValue('--blue').trim() || '#7dd3fc',
+    getComputedStyle(document.documentElement).getPropertyValue('--yellow').trim() || '#fff680'
+  ];
   for(let i=0;i<80;i++){
     const c=document.createElement('div');
     c.className='confetti';
     c.style.background=colors[Math.floor(Math.random()*colors.length)];
     c.style.left=Math.random()*100+'vw';
     c.style.animationDelay=(Math.random()*3)+'s';
-    gold.appendChild(c);
+    end.appendChild(c);
   }
 }
-function chipColor(n){const c=["#ff6ec7","#5ee6ff","#ffd166","#8aff80","#c77dff","#fff680","#ff9a8b","#9bffb7","#7cc6ff","#f7a6ff"];return c[n%c.length];}
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
-function wait(ms){return new Promise(res=>setTimeout(res,ms));}
-function playSafe(a){try{a.pause();a.currentTime=0;a.play();}catch{}}
+
+/* ===== Utils ===== */
+function chipColor(n){
+  const c=["#ff6ec7","#5ee6ff","#ffd166","#8aff80","#c77dff","#fff680","#ff9a8b","#9bffb7","#7cc6ff","#f7a6ff"];
+  return c[n % c.length];
+}
+function shuffle(a){
+  for(let i=a.length-1;i>0;i--){
+    const j=(Math.random()*(i+1))|0;
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function wait(ms){ return new Promise(res=>setTimeout(res,ms)); }
+
+/* Robust audio play: pause→reset→play, returned as a promise */
+function playSafe(a){
+  try{
+    a.pause();
+    a.currentTime=0;
+    const p=a.play();
+    if(p && typeof p.then==="function"){ return p.catch(()=>{}); }
+  }catch(e){}
+  return Promise.resolve();
+}
+
+/* go */
 mount();
 </script>
 </body>
