@@ -11,6 +11,7 @@
   --bg:#0b1530; --ink:#fff; --outline:#ffffff26;
   --ok:#22c55e; --heart:#ff4fa6;
   --radius:26px;
+  --pink:#ff7eb9; --mint:#a6f7b2; --blue:#7dd3fc; --yellow:#fff680;
 }
 *{box-sizing:border-box}
 body{
@@ -79,32 +80,35 @@ header{text-align:center;padding:26px 12px 12px}
 .correctLine.show{opacity:1}
 
 /* FX */
-.fx{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.fx{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1000}
 .heart{position:absolute;color:var(--heart);font-size:clamp(50px,9vw,90px);text-shadow:0 4px 0 rgba(0,0,0,.35);animation:heartFly 1200ms ease-out forwards;}
 @keyframes heartFly{0%{opacity:0;transform:translate(-50%,-20px) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-240px) scale(1.5)}}
 .smoke{position:absolute;width:clamp(60px,15vw,160px);height:clamp(60px,15vw,160px);border-radius:50%;background:radial-gradient(circle at 40% 40%,#fff,rgba(255,255,255,.7) 60%,rgba(255,255,255,0) 72%);animation:smokeRise 1600ms ease-out forwards;filter:blur(1px);}
 @keyframes smokeRise{0%{opacity:0;transform:translate(-50%,0) scale(.6)}20%{opacity:.9}100%{opacity:0;transform:translate(-50%,-260px) scale(1.4)}}
 
 /* End screens */
-.end{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding:0 10px}
+.end{
+  position:fixed;inset:0;display:none;flex-direction:column;
+  align-items:center;justify-content:flex-start;text-align:center;
+  padding:0 10px;overflow:hidden;
+}
 .end header{margin-bottom:20px}
-.end h2{font-family:'Cinzel',serif;font-size:clamp(26px,6vw,40px);margin:0 0 8px}
-.end .score{font-weight:900;font-size:clamp(20px,5vw,28px);margin-top:6px}
-.end .msg{font-weight:900;font-size:clamp(24px,5.6vw,40px);margin-bottom:10px}
+.end .msg{font-weight:900;font-size:clamp(24px,5.6vw,40px);margin:20px auto 10px;text-align:center;}
+.end .score{font-weight:900;font-size:clamp(22px,5vw,30px);margin:4px auto 20px;text-align:center;}
 
 .end.red   {background:#a30606; animation:endGlowRed 3s ease-in-out infinite}
 .end.orange{background:#b85c00; animation:endGlowOrange 3s ease-in-out infinite}
 .end.blue  {background:#063a8f; animation:endGlowBlue 3s ease-in-out infinite}
-.end.gold  {background:#b58900; animation:endGlowGold 3s ease-in-out infinite; overflow:hidden;}
-@keyframes endGlowRed   {50%{box-shadow:inset 0 0 180px 40px rgba(255,80,80,.65)}}
+.end.gold  {background:#b58900; animation:endGlowGold 3s ease-in-out infinite;position:relative;}
+@keyframes endGlowRed{50%{box-shadow:inset 0 0 180px 40px rgba(255,80,80,.65)}}
 @keyframes endGlowOrange{50%{box-shadow:inset 0 0 180px 40px rgba(255,166,58,.65)}}
-@keyframes endGlowBlue  {50%{box-shadow:inset 0 0 180px 40px rgba(88,160,255,.65)}}
-@keyframes endGlowGold  {50%{box-shadow:inset 0 0 180px 40px rgba(255,215,96,.7)}}
+@keyframes endGlowBlue{50%{box-shadow:inset 0 0 180px 40px rgba(88,160,255,.65)}}
+@keyframes endGlowGold{50%{box-shadow:inset 0 0 180px 40px rgba(255,215,96,.7)}}
 
-/* raining confetti for gold page */
+/* Booha pastel confetti */
 .confetti{
-  position:absolute;width:12px;height:12px;background:hsl(var(--hue),80%,60%);
-  top:-20px;animation:confettiFall 3s linear infinite;
+  position:absolute;width:12px;height:12px;top:-20px;
+  animation:confettiFall 3s linear infinite;
 }
 @keyframes confettiFall{
   0%{transform:translateY(0) rotate(0deg);opacity:1}
@@ -126,16 +130,13 @@ footer{text-align:center;color:#c9d4ec;font-family:'Cinzel',serif;font-weight:70
   <div class="panel" id="panel">
     <div class="jpCard"><div id="jp" class="jpText"></div></div>
     <div id="hira" class="hira"></div>
-
     <div id="bank" class="wordbank"></div>
     <div id="sentence" class="sentence"></div>
-
     <div id="correctLine" class="correctLine"></div>
     <div id="okWrap" style="text-align:center;display:none">
       <div style="margin-top:8px">正しい文を読んで OK をクリック</div>
       <button id="okBtn" class="btn blue" style="margin-top:10px;padding:10px 28px;font-size:clamp(16px,3.8vw,20px)">OK</button>
     </div>
-
     <button id="checkBtn" class="btn" disabled>Check</button>
     <div id="progress">1 / 15（0%）</div>
   </div>
@@ -150,7 +151,7 @@ footer{text-align:center;color:#c9d4ec;font-family:'Cinzel',serif;font-weight:70
   </header>
   <div class="msg" id="endMsg"></div>
   <div class="score" id="scoreText"></div>
-  <button class="btn" onclick="window.location.href='index.html'">Return to Main Menu</button>
+  <button class="btn" onclick="window.location.href='index.html'">メインメニューに戻る (Return to MAIN MENU)</button>
   <footer style="opacity:.85">Bryan’s English School</footer>
 </div>
 
@@ -221,8 +222,11 @@ check.onclick=async()=>{
   const built=[...sent.children].map(e=>e.textContent).join(' ').trim();
   const correct=item.en.trim();
   if(built===correct){
-    score++;bigHearts(sent);playSafe(SOK);
-    await wait(2000);next();
+    score++;
+    playSafe(SOK);
+    bigHearts(sent);
+    await wait(2000); // ensure hearts/audio finish
+    next();
   }else{
     correctLine.textContent="正解："+correct;
     correctLine.classList.add('show');
@@ -231,7 +235,11 @@ check.onclick=async()=>{
   }
 };
 okBtn.onclick=()=>{okWrap.style.display='none';next();};
-function next(){i++;if(i>=DATA.length){finish();return;}mount();}
+function next(){
+  i++;
+  if(i>=DATA.length){setTimeout(finish,1200);return;}
+  mount();
+}
 function updateProgress(){
   const n=i+1,total=DATA.length;
   const pct=Math.round(((n-1)/total)*100);
@@ -269,13 +277,16 @@ function hugeSmoke(el,count=18){
     fx.appendChild(s);setTimeout(()=>s.remove(),1600);
   }
 }
-/* gold page confetti */
 function rainConfetti(){
   const gold=end;
+  const colors=[getComputedStyle(document.documentElement).getPropertyValue('--pink'),
+                getComputedStyle(document.documentElement).getPropertyValue('--mint'),
+                getComputedStyle(document.documentElement).getPropertyValue('--blue'),
+                getComputedStyle(document.documentElement).getPropertyValue('--yellow')];
   for(let i=0;i<80;i++){
     const c=document.createElement('div');
     c.className='confetti';
-    c.style.setProperty('--hue',Math.floor(Math.random()*360));
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
     c.style.left=Math.random()*100+'vw';
     c.style.animationDelay=(Math.random()*3)+'s';
     gold.appendChild(c);
@@ -284,7 +295,7 @@ function rainConfetti(){
 function chipColor(n){const c=["#ff6ec7","#5ee6ff","#ffd166","#8aff80","#c77dff","#fff680","#ff9a8b","#9bffb7","#7cc6ff","#f7a6ff"];return c[n%c.length];}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
 function wait(ms){return new Promise(res=>setTimeout(res,ms));}
-function playSafe(a){try{a.currentTime=0;a.play();}catch{}}
+function playSafe(a){try{a.pause();a.currentTime=0;a.play();}catch{}}
 mount();
 </script>
 </body>
